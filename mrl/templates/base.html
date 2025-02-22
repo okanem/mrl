@@ -122,26 +122,36 @@
                                 <div class="vr opacity-2 d-none d-lg-inline-block"></div>
                                 <div class="d-none d-lg-inline-block">
                                     <ul class="nav nav-pills me-1">
-                                        <li class="nav-item pe-2 mx-1">
-                                            <a href="http://www.facebook.com/" target="_blank" title="Facebook"
-                                               class="text-color-default text-color-hover-primary text-2"><i
-                                                    class="fab fa-facebook-f"></i></a>
-                                        </li>
-                                        <li class="nav-item px-2 mx-1">
-                                            <a href="http://www.x.com/" target="_blank" title="X"
-                                               class="text-color-default text-color-hover-primary text-2"><i
-                                                    class="fab fa-x-twitter"></i></a>
-                                        </li>
-                                        <li class="nav-item px-2 mx-1">
-                                            <a href="http://www.instagram.com/" target="_blank" title="Instagram"
-                                               class="text-color-default text-color-hover-primary text-2"><i
-                                                    class="fab fa-instagram"></i></a>
-                                        </li>
-                                        <li class="nav-item px-2 mx-1 me-0 pe-0">
-                                            <a href="http://www.linkedin.com/" target="_blank" title="Linkedin"
-                                               class="text-color-default text-color-hover-primary text-2"><i
-                                                    class="fab fa-linkedin-in"></i></a>
-                                        </li>
+                                        {% with facebook_url=settings.base.NavigationSettings.facebook_url x_url=settings.base.NavigationSettings.x_url instagram_url=settings.base.NavigationSettings.instagram_url linkedin_url=settings.base.NavigationSettings.linkedin_url %}
+                                            {% if facebook_url %}
+                                            <li class="nav-item pe-2 mx-1">
+                                                <a href="{{ facebook_url }}" target="_blank" title="Facebook"
+                                                   class="text-color-default text-color-hover-primary text-2"><i
+                                                        class="fab fa-facebook-f"></i></a>
+                                            </li>
+                                            {% endif %}
+                                            {% if x_url %}
+                                            <li class="nav-item px-2 mx-1">
+                                                <a href="{{ x_url }}" target="_blank" title="X"
+                                                   class="text-color-default text-color-hover-primary text-2"><i
+                                                        class="fab fa-x-twitter"></i></a>
+                                            </li>
+                                            {% endif %}
+                                            {% if instagram_url %}
+                                            <li class="nav-item px-2 mx-1">
+                                                <a href="{{ instagram_url }}" target="_blank" title="Instagram"
+                                                   class="text-color-default text-color-hover-primary text-2"><i
+                                                        class="fab fa-instagram"></i></a>
+                                            </li>
+                                            {% endif %}
+                                            {% if linkedin_url %}
+                                            <li class="nav-item px-2 mx-1 me-0 pe-0">
+                                                <a href="{{ linkedin_url }}" target="_blank" title="Linkedin"
+                                                   class="text-color-default text-color-hover-primary text-2"><i
+                                                        class="fab fa-linkedin-in"></i></a>
+                                            </li>
+                                            {% endif %}
+                                        {% endwith %}
                                     </ul>
                                 </div>
                             </div>
