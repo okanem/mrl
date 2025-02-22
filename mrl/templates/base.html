@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar %}
+{% load static wagtailcore_tags wagtailuserbar navigation_tags%}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -151,40 +151,21 @@
                                 <div class="h-100 w-100 w-xl-auto">
                                     <div class="header-nav header-nav-links h-100 justify-content-end justify-content-lg-start me-4 me-lg-0 ms-lg-3">
                                         <div class="header-nav-main header-nav-main-square header-nav-main-dropdown-no-borders header-nav-main-text-capitalize header-nav-main-text-size-4 header-nav-main-arrows header-nav-main-full-width-mega-menu header-nav-main-mega-menu-bg-hover header-nav-main-effect-5">
+                                            {% get_site_root as site_root %}
                                             <nav class="collapse">
                                                 <ul class="nav nav-pills" id="mainNav">
                                                     <li class="dropdown">
-                                                        <a href="/"
-                                                           class="nav-link active">
-                                                            Home
-                                                        </a>
+                                                        <a href="{% pageurl site_root %}" class="nav-link active"> Home</a>
                                                     </li>
+                                                    {% for menuitem in site_root.get_children.live.in_menu %}
                                                     <li>
                                                         <a class="nav-link"
-                                                           href="/about-us/">
-                                                            About Us
+                                                           href="{% pageurl menuitem %}">
+                                                            {{ menuitem.title }}
                                                         </a>
                                                     </li>
+                                                    {% endfor %}
 
-                                                    <li>
-                                                        <a class="nav-link"
-                                                           href="/services/">
-                                                            Services
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <a class="nav-link"
-                                                           href="/news-page/">
-                                                            News
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="nav-link"
-                                                           href="/contact/">
-                                                            Contact Us
-                                                        </a>
-                                                    </li>
                                                 </ul>
                                             </nav>
                                         </div>
