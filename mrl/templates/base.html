@@ -207,7 +207,7 @@
             <div class="row pt-5">
                 <div class="col-lg-4">
                     <a href="demo-transportation-logistic.html" class="text-decoration-none">
-                        <img src="img/demos/transportation-logistic/logogls1.png" class="img-fluid mb-4" width="88">
+                        <img src="/static/img/logogls1.png" class="img-fluid mb-4" width="88">
                     </a>
                     <p class="text-3-5 pe-lg-2">Here we make magic by delivering smiles to our customers one cargo at a time. </p>
                     <ul class="list list-unstyled">
@@ -231,12 +231,10 @@
                         <div class="col-lg-6 mb-4 mb-lg-0">
                             <h4 class="text-color-light font-weight-semibold mb-3">Navigation</h4>
                             <ul class="list list-unstyled columns-lg-2">
-                                <li><a href="#" class="text-color-grey text-color-hover-primary">Home</a></li>
-                                <li><a href="#" class="text-color-grey text-color-hover-primary">About Us</a></li>
-                                <li><a href="#" class="text-color-grey text-color-hover-primary">Services</a></li>
-                                <li><a href="#" class="text-color-grey text-color-hover-primary">News</a></li>
-                                <li><a href="#" class="text-color-grey text-color-hover-primary">Pages</a></li>
-                                <li><a href="#" class="text-color-grey text-color-hover-primary">Contact Us</a></li>
+                                <li><a href="{% pageurl site_root %}" class="text-color-grey text-color-hover-primary">Home</a></li>
+                                {% for menuitem in site_root.get_children.live.in_menu %}
+                                <li><a href="{% pageurl menuitem %}" class="text-color-grey text-color-hover-primary">{{ menuitem.title }}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="col-lg-6">
