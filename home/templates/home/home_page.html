@@ -11,10 +11,17 @@ Delete the line below if you're just getting started and want to remove the welc
 {% endblock extra_css %}
 
 {% block content %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{#{% include 'home/welcome_page.html' %}#}
-
+    {% comment %}
+    Delete the line below if you're just getting started and want to remove the welcome screen!
+    {% endcomment %}
+    {% include 'home/owl-carousel.html' %}
+    {% include 'home/our_service.html' %}
+    {% include 'home/in-sight.html' %}
+    {% include 'home/owl-carousel2.html' %}
+    {% include 'home/testimonials.html' %}
+    {% include 'home/online_quote.html' %}
+    {% include 'home/our_process.html' %}
+    {% include 'home/latest-news_and_faq.html' %}
+    {% include 'home/brands.html' %}
+    {% include 'home/our_location.html' %}
 {% endblock content %}
