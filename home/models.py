@@ -17,3 +17,4 @@ class NewsPage(Page):
 
 class ContactPage(Page):
     pass
+

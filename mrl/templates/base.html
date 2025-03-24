@@ -1,5 +1,4 @@
 {% load static wagtailcore_tags wagtailuserbar navigation_tags%}
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -187,7 +186,7 @@
                                 </div>
                                 <div class="vr opacity-2 ms-auto d-none d-xl-inline-block"></div>
                                 <div class="px-4 d-none d-xxl-inline-block ws-nowrap">
-                                    <a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-tertiary me-2">Request
+                                    <a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-tertiary me-2" data-bs-toggle="modal" data-bs-target="#cargoCalculatorModal">Request
                                         Rate</a>
                                     <a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-primary">Track Order</a>
                                 </div>
@@ -221,7 +220,7 @@
                         </li>
                     </ul>
                     <div class="d-none d-xxl-inline-block ws-nowrap">
-                        <a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-light text-color-dark me-2">Request
+                        <a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-light text-color-dark me-2" data-bs-toggle="modal" data-bs-target="#cargoCalculatorModal">Request
                             Rate</a>
                         <a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-primary">Track Order</a>
                     </div>
@@ -306,5 +305,175 @@
         {% block extra_js %}
         {# Override this in templates to add extra javascript #}
         {% endblock %}
+ <!-- Request Rate Modal (Cargo Calculator) -->
+<div class="modal fade" id="cargoCalculatorModal" tabindex="-1" aria-labelledby="cargoCalculatorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="cargoCalculatorLabel">Cargo Calculator</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cargoForm" onsubmit="calculateCargo(event)" action="https://usebasin.com/f/42e4e893bc56" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstname" class="form-label font-weight-bold">First Name:</label>
+                            <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Enter your first name" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label font-weight-bold">Email:</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label font-weight-bold">Phone:</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number" pattern="\d{11}" minlength="11" maxlength="11" title="Enter an 11-digit phone number" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="from" class="form-label font-weight-bold">From:</label>
+                            <select id="from" name="from" class="form-select" required>
+                                <option value="UK">England</option>
+                                <option value="Scotland">Scotland</option>
+                                <option value="Wales">Wales</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="to" class="form-label font-weight-bold">To:</label>
+                            <select id="to" name="to" class="form-select" onchange="updateRate()" required>
+                                <option value="Lagos">Lagos</option>
+                                <option value="Abuja">Abuja</option>
+                                <option value="PH">Port Harcourt</option>
+                                <option value="Akwa Ibom">Akwa Ibom</option>
+                                <option value="Kano">Kano</option>
+                                <option value="Anambra">Anambra</option>
+                                <option value="Ogun">Ogun</option>
+                                <option value="Imo">Imo</option>
+                                <option value="Delta">Delta</option>
+                                <option value="Kaduna">Kaduna</option>
+                                <option value="Edo">Edo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="length" class="form-label font-weight-bold">Length (cm):</label>
+                            <input type="number" id="length" name="length" class="form-control" placeholder="Enter length" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="width" class="form-label font-weight-bold">Width (cm):</label>
+                            <input type="number" id="width" name="width" class="form-control" placeholder="Enter width" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="height" class="form-label font-weight-bold">Height (cm):</label>
+                            <input type="number" id="height" name="height" class="form-control" placeholder="Enter height" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="weight" class="form-label font-weight-bold">Weight (kg):</label>
+                            <input type="number" id="weight" name="weight" class="form-control" placeholder="Enter weight" required>
+                        </div>
+                    </div>
+                    <!-- Hidden Input for Final Price -->
+                    <input type="hidden" id="final_price" name="final_price">
+                    <button type="submit" class="btn btn-primary w-100">Calculate</button>
+                </form>
+                <div id="results" class="text-center mt-3 font-weight-bold text-dark">
+                    <p id="cargo_weight"></p>
+                    <p id="cargo_volume"></p>
+                    <p id="cargo_price"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Update Request Rate Button to Open Modal -->
+<a href="#" class="btn border-0 px-4 py-2 line-height-9 btn-tertiary me-2 d-none" data-bs-toggle="modal" data-bs-target="#cargoCalculatorModal">
+    Request Rate
+</a>
+
+
+<!-- Cargo Calculator JavaScript -->
+<script>
+    function updateRate() {
+        let to = document.getElementById("to").value;
+        let rates = { "Lagos": 5.60, "Abuja": 6.10, "PH": 6.00, "Akwa Ibom": 6.20, "Kano": 6.50, "Anambra": 6.10, "Ogun": 5.70, "Imo": 6.30, "Delta": 6.10, "Kaduna": 6.50, "Edo":6.00 };
+        document.getElementById("to").setAttribute("data-rate", rates[to]);
+    }
+
+    function calculateCargo(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Get form values
+    let length = parseFloat(document.getElementById("length").value);
+    let width = parseFloat(document.getElementById("width").value);
+    let height = parseFloat(document.getElementById("height").value);
+    let weight = parseFloat(document.getElementById("weight").value);
+    let destination = document.getElementById("to").value;
+
+    // Calculate volume weight
+    let volume = (length * width * height) / 5000;
+    let chargeableWeight = Math.max(weight, volume);
+
+    // Define price per kg based on destination
+    let pricePerKg = 5.60; // Default for Lagos
+    if (destination === "Abuja") {
+        pricePerKg = 6.10;
+    } else if (destination === "PH") {
+        pricePerKg = 6.00;
+    } else if (destination === "Akwa Ibom") {
+        pricePerKg = 6.20;
+    } else if (destination === "Kano") {
+        pricePerKg = 6.50;
+    } else if (destination === "Anambra") {
+        pricePerKg = 6.10;
+    } else if (destination === "Ogun") {
+        pricePerKg = 5.70;
+    } else if (destination === "Imo") {
+        pricePerKg = 6.30;
+    } else if (destination === "Delta") {
+        pricePerKg = 6.10;
+    } else if (destination === "Kaduna") {
+        pricePerKg = 6.50;
+    } else if (destination === "Edo") {
+        pricePerKg = 6.00;
+    }
+
+    // Calculate price with handling fee
+    let price = chargeableWeight * pricePerKg + 20; // Adding £20 handling fee
+
+    // Display the results
+    document.getElementById("cargo_weight").innerText = `Chargeable Weight: ${chargeableWeight.toFixed(2)} kg`;
+    document.getElementById("cargo_volume").innerText = `Volume Weight: ${volume.toFixed(2)} kg`;
+    document.getElementById("cargo_price").innerText = `Estimated Price: £${price.toFixed(2)} (including £20 handling fee)`;
+
+    // Set the final price in the hidden input field for form submission
+    document.getElementById("final_price").value = price.toFixed(2);
+
+    document.addEventListener("DOMContentLoaded", updateRate);
+    // Submit the form via JavaScript
+    sendForm();
+     }
+    // Function to send form data to Basin
+function sendForm() {
+    let form = document.getElementById("cargoForm");
+    let formData = new FormData(form);
+// Ensure all form values, including final_price, are included before submission
+    formData.append("final_price", document.getElementById("final_price").value);
+
+    fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: { "Accept": "application/json" }
+    }).then(response => {
+        if (response.ok) {
+            alert("Your form has been submitted successfully!");
+            form.reset(); // Clear form after submission
+        } else {
+            alert("There was an error submitting your form. Please try again.");
+        }
+    }).catch(error => {
+        console.error("Error submitting form:", error);
+        alert("Error submitting form. Check console for details.");
+    });
+}
+</script>
+<script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+
     </body>
 </html>
