@@ -1,0 +1,87 @@
+{% load i18n wagtailcore_tags %}
+<div class="container">
+		<div class="row py-5 my-3">
+    <div class="col">
+        <form class="contact-form form-style-3" action="https://usebasin.com/f/42e4e893bc56" method="POST" id="contactForm">
+            <!-- Success Message -->
+            <div class="contact-form-success alert alert-success d-none mt-4" id="successMessage">
+                <strong>Success!</strong> Your message has been sent to us.
+            </div>
+
+            <!-- Error Message -->
+            <div class="contact-form-error alert alert-danger d-none mt-4" id="errorMessage">
+                <strong>Error!</strong> There was an error sending your message.
+                <span class="mail-error-message text-1 d-block"></span>
+            </div>
+
+            <div class="row row-gutter-sm">
+                <div class="form-group col-lg-6 mb-4">
+                    <input type="text" value="" data-msg-required="Please enter your name." maxlength="100" class="form-control" name="name" id="name" required placeholder="First Name">
+                </div>
+                <div class="form-group col-lg-6 mb-4">
+                    <input type="tel" value="" data-msg-required="Please enter your phone number." maxlength="11" pattern="\d{11}" class="form-control" name="phone" id="phone" required placeholder="Phone Number" title="Enter a valid 11-digit phone number">
+                </div>
+            </div>
+            <div class="row row-gutter-sm">
+                <div class="form-group col-lg-6 mb-4">
+                    <input type="email" value="" data-msg-required="Please enter your email address." data-msg-email="Please enter a valid email address." maxlength="100" class="form-control" name="email" id="email" required placeholder="Email Address">
+                </div>
+                <div class="form-group col-lg-6 mb-4">
+                    <input type="text" value="" data-msg-required="Please enter the subject." maxlength="100" class="form-control" name="subject" id="subject" required placeholder="Subject">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col mb-4">
+                    <textarea maxlength="5000" data-msg-required="Please enter your message." rows="10" class="form-control" name="message" id="message" required placeholder="Your Message"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col mb-0">
+                    <button type="submit" class="btn btn-tertiary border-0 text-3 font-weight-semi-bold btn-px-5 btn-py-3 d-none d-md-inline-block" data-loading-text="Loading...">Send Message</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript to Show Success/Error Message -->
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    var form = this;
+    var phoneInput = document.getElementById("phone").value.trim();
+    var successMessage = document.getElementById("successMessage");
+    var errorMessage = document.getElementById("errorMessage");
+
+    // Check if phone number is exactly 11 digits
+    if (!/^\d{11}$/.test(phoneInput)) {
+        errorMessage.classList.remove("d-none");
+        errorMessage.innerHTML = "<strong>Error!</strong> Phone number must be exactly 11 digits.";
+        successMessage.classList.add("d-none");
+        return; // Stop submission
+    } else {
+        errorMessage.classList.add("d-none");
+    }
+
+    var formData = new FormData(form);
+
+    fetch(form.action, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            successMessage.classList.remove("d-none");
+            errorMessage.classList.add("d-none");
+            form.reset(); // Clear form after submission
+        } else {
+            throw new Error("Form submission failed");
+        }
+    })
+    .catch(error => {
+        errorMessage.classList.remove("d-none");
+        successMessage.classList.add("d-none");
+    });
+});
+</script>

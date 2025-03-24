@@ -1,0 +1,123 @@
+{% load i18n wagtailcore_tags %}
+<head>
+<style>
+    .courier-form-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(139, 242, 121, 1);
+    }
+    .courier-form-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .courier-form-table td {
+        padding: 10px;
+    }
+    .courier-form-table label {
+        font-weight: bold;
+    }
+    .courier-form-table input, .courier-form-table textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .courier-form-table input:invalid, .courier-form-table textarea:invalid {
+        border-color: red;
+    }
+    .submit-btn {
+        width: 100%;
+        padding: 10px;
+        background: #3ac82b;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .submit-btn:hover {
+        background: #8bf279;
+    }
+    h1{
+    text-align: center;
+    color:#3ac82b;
+    }
+    h2{text-align:center;}
+</style>
+</head>
+<h1>You can request your cargo pickup from your doorstep. </h1>
+<div class="courier-form-container">
+    <h2>PICK-UP REQUEST</h2>
+    <form id="courier-booking-form">
+        <table class="courier-form-table">
+            <tr>
+                <td><label for="name">Full Name:</label></td>
+                <td><input type="text" id="name" name="name" required pattern="[A-Za-z ]{3,}" placeholder="Enter your full name"></td>
+            </tr>
+            <tr>
+                <td><label for="address">Pickup Address:</label></td>
+                <td><input type="text" id="address" name="address" required placeholder="Enter pickup location"></td>
+            </tr>
+            <tr>
+                <td><label for="parcel_details">Parcel Details:</label></td>
+                <td><textarea id="parcel_details" name="parcel_details" required minlength="10" placeholder="Describe your parcel"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="pickup_time">Preferred Pickup Time:</label></td>
+                <td><input type="datetime-local" id="pickup_time" name="pickup_time" required></td>
+            </tr>
+        </table>
+        <button type="submit" class="submit-btn">Book Pickup</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("courier-booking-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        let name = document.getElementById("name").value.trim();
+        let address = document.getElementById("address").value.trim();
+        let parcelDetails = document.getElementById("parcel_details").value.trim();
+        let pickupTime = document.getElementById("pickup_time").value;
+
+        if (name.length < 3 || parcelDetails.length < 10) {
+            alert("Please enter valid details.");
+            return;
+        }
+
+        let formData = { name, address, parcel_details: parcelDetails, pickup_time: pickupTime };
+
+        fetch("/courier-booking/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCsrfToken()
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    });
+
+    function getCsrfToken() {
+        let cookieValue = null;
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.startsWith("csrftoken=")) {
+                cookieValue = cookie.substring("csrftoken=".length, cookie.length);
+                break;
+            }
+        }
+        return cookieValue;
+    }
+</script>

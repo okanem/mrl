@@ -1,0 +1,25 @@
+{% load i18n wagtailcore_tags %}
+<div role="main" class="main">
+    <!-- Page Header Section -->
+    <div class="custom-page-header border-bottom-light">
+        <section class="page-header page-header-modern page-header-lg overlay overlay-light overlay-show overlay-op-7 m-0" style="background-image: url('/static/img/demos/transportation-logistic/backgrounds/background-1.jpg'); background-size: cover; background-position: center;">
+            <div class="container py-4">
+                <div class="row">
+                    <div class="col">
+                        <!-- Breadcrumbs -->
+                        <ul class="breadcrumb text-4 font-weight-semi-bold mb-2">
+                            <!-- Wagtail placeholder for breadcrumbs -->
+                            {% block breadcrumbs %}
+                                <li><a href="/" class="text-color-primary text-decoration-none text-capitalize">Home</a></li>
+                                <li class="text-color-primary active text-capitalize">Services</li>
+                            {% endblock %}
+                        </ul>
+                        <!-- Page Title -->
+                        <h1 class="text-color-tertiary font-weight-semi-bold text-9">
+                            {% block page_title %}Services{% endblock %}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
